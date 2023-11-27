@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="https://openlayers.org/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using OpenLayers with Vite</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./node_modules/ol/ol.css" />
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNGXGaZGz4G7Pqz4SWctcSDKMnJ4kpaoc&libraries=places" defer></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+</head>
+<body>
+<div id="map"></div>
+<label for="postalCodeInput">Enter Postal Code:</label>
+<input type="text" id="postalCodeInput" />
+<button onclick="addMarker()">Add Marker</button>
+
+<p id="dataTekst"></p>
+<script type="module" src="./main.js"></script>
+<script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
+</body>
+</html>
