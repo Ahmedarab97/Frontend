@@ -12,11 +12,39 @@ import {getCoordinatenVanGoogleMaps} from "./javascript/openstreetmap/openstreet
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibmllbHMtc3R1ZGVudCIsImEiOiJjbHA5cmJ1NTIwMDYxMmlybGFrZWRjbDZ6In0.8VO7uezdXrrfBqeZpyYXDA';
 
+const popupStyles = {
+  position: 'absolute',
+  backgroundColor: 'white',
+  boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)',
+  padding: '15px',
+  borderRadius: '10px',
+  border: '1px solid #cccccc',
+  bottom: '12px',
+  left: '-50px',
+  minWidth: '180px'
+};
+
+const popupArrowStyles = {
+  top: '100%',
+  border: 'solid transparent',
+  content: ' ',
+  height: '0',
+  width: '0',
+  position: 'absolute',
+  pointerEvents: 'none'
+};
+
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v11',
   center: await getCoordinatenVanGoogleMaps("nieuwegein"),
   zoom: 12,
+});
+
+const popup = new mapboxgl.Popup({
+  closeButton: false,
+  closeOnClick: false,
+  offset: 25
 });
 
 map.on('load', () => {
@@ -77,7 +105,33 @@ window.addMarker = async function() {
       'circle-stroke-width': 2
     }
   });
+  map.on('click', 'bolletjes-layer', function (e) {
+    const features = e.features;
+
+    if(!features || features.lenght === 0) {
+      console.log("yo mensen er is niks he matsko");
+    }
+
+    const clickedFeature = features[0];
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const properties = clickedFeature.properties;
+    const description = `Wijk: ${properties.naam}<br>Laag geletterdheid: ${properties.wijkInfo}%<br>Aantal inwoners: ${properties.aantalInwoners}`;
+    new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(description)
+        .addTo(map);
+  });
+
+  map.on('mouseenter', 'bolletjes-layer', function () {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', 'bolletjes-layer', function () {
+    map.getCanvas().style.cursor = '';
+  });
 }
+
+
 // pakCoordinaten();
 //, "3431BB", "3431BC", "3431BD", "3431BE", "3431BM", "3431CA", "3431CB", "3431CC"
 

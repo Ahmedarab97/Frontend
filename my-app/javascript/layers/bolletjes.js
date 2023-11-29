@@ -44,7 +44,8 @@ export async function bolletjesLayer() {
             let coordinatesCijferObject = {
                 coord: coordinates,
                 cijfer: buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei,
-                totaleHuishoudens: buurt.aantalInwoners
+                totaleHuishoudens: buurt.aantalInwoners,
+                naam: buurt.naam
             };
             points.push(coordinatesCijferObject);
             // This pushes something like [{coord: [1, 1.00012], cijfer: 5}]
@@ -104,7 +105,14 @@ export async function bolletjesLayer() {
             properties: {
                 label: afgerond.toString(),
                 size: size,
-                color: color
+                color: color,
+                naam: point.naam,
+                wijkInfo: {
+                    laagGeletterdheid: {
+                        percentageTaalgroei: point.cijfer
+                    }
+                },
+                aantalInwoners: point.totaleHuishoudens
             }
         });
     }
