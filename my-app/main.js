@@ -51,7 +51,7 @@ var map = new mapboxgl.Map({
       source: 'wijken-source',
       layout: {},
       paint: {
-        'line-color': 'blue', // Kleur van de outline
+        'line-color': 'black', // Kleur van de outline
         'line-width': 2, // Breedte van de outline
       },
     });
