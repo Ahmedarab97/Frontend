@@ -73,7 +73,9 @@ window.addLayer =  async function() {
       layout: {},
       paint: {
         'fill-color': ['get', 'fill_color'], // Dynamische kleur gebaseerd op de waarde van fill_color
-        'fill-opacity': 0.4, // Optioneel: pas de opaciteit van de vulling aan
+        'fill-opacity': 0.4, //pas de opaciteit van de vulling aan
+        'fill-outline-color': 'black', // Kleur van de outline
+        'fill-antialias': true,
       },
     });
 }
