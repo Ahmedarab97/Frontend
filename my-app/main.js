@@ -109,14 +109,6 @@ loadGeoJSON(origineleGeojson).then(origineleGeojson => {
 })
 
 
-
-
-const popup = new mapboxgl.Popup({
-  closeButton: false,
-  closeOnClick: false,
-  offset: 25
-});
-
 map.on('load', () => {
   // Add the 3D building layer
   map.addLayer({
