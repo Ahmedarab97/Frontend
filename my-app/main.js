@@ -2,6 +2,8 @@ import {bolletjesLayer} from "./javascript/layers/bolletjes";
 import {getCoordinatenVanGoogleMaps} from "./javascript/openstreetmap/openstreetmapAPI";
 import {or} from "ol/format/filter";
 import proj4 from 'proj4';
+import {getSimpleGeoJson} from "./javascript/layers/simplifiedGeoJson";
+import {getLaaggeletterdheidGeoJson} from "./javascript/layers/laaggeltterdheidLayer";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibmllbHMtc3R1ZGVudCIsImEiOiJjbHA5cmJ1NTIwMDYxMmlybGFrZWRjbDZ6In0.8VO7uezdXrrfBqeZpyYXDA';
 
@@ -34,64 +36,12 @@ var map = new mapboxgl.Map({
   zoom: 12,
 });
 
-proj4.defs('EPSG:28992', '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,-1.8703473836068,4.0812 +units=m +no_defs');
-proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
-
-const convertCoordinatesTo4326 = (coordinates) => {
-  // Controleer of de coördinaten array is en minimaal 2 punten bevat
-  if (!Array.isArray(coordinates) || coordinates.length < 2) {
-    throw new Error('Ongeldige coördinaten');
-  }
-
-  // Loop door de coördinaten en converteer elk punt
-  const convertedCoordinates = coordinates.map(point => {
-    // Controleer of de coördinaten van het punt geldige getallen zijn
-    if (!point || point.length !== 2 || !isFinite(point[0]) || !isFinite(point[1])) {
-      throw new Error('Ongeldige coördinaten voor punt');
-    }
-
-    // Converteer de coördinaten naar EPSG:4326
-    const transformedPoint = proj4('EPSG:28992', 'EPSG:4326', point);
-
-    // Retourneer het geconverteerde punt
-    return transformedPoint;
-  });
-
-  // Retourneer de array met geconverteerde coördinaten
-  return convertedCoordinates;
-};
-
-console.log(getCoordinatenVanGoogleMaps("nieuwegein"))
-
-async function loadGeoJSON(filePath) {
-  const response = await fetch(filePath);
-  const geojson = await response.json();
-  return geojson;
-}
-const origineleGeojson = '/data/WijkenNieuwegein.geojson'
-
-loadGeoJSON(origineleGeojson).then(origineleGeojson => {
-  const simplifiedGeoJson = {
-    type: 'FeatureCollection',
-    features: origineleGeojson.features.map(feature => {
-      const exteriorRing = feature.geometry.coordinates.map(polygon => polygon.map(point => convertCoordinatesTo4326(point)))
-      console.log(exteriorRing);
-      return {
-        type: 'Feature',
-        properties: feature.properties,
-        geometry: {
-          type: 'Polygon',
-          coordinates: exteriorRing[0],
-        },
-      };
-    })
-  }
-
-  console.log(simplifiedGeoJson.features);
+ const geojson1 = await getSimpleGeoJson()
+  console.log(geojson1.features);
   map.on('load', function () {
     map.addSource('wijken-source', {
       type: 'geojson',
-      data: simplifiedGeoJson,
+      data: geojson1,
     });
 
     // Voeg een laag toe voor de outlines van wijken
@@ -106,8 +56,26 @@ loadGeoJSON(origineleGeojson).then(origineleGeojson => {
       },
     });
   })
-})
 
+const laagGeletterdHeidGeoJson = await getLaaggeletterdheidGeoJson()
+map.on('click', function () {
+  map.addSource('laag-source', {
+    type: 'geojson',
+    data: laagGeletterdHeidGeoJson,
+  });
+
+  // Voeg een laag toe voor de outlines van wijken
+  map.addLayer({
+    id: 'laag-layer',
+    type: 'fill',
+    source: 'laag-source',
+    layout: {},
+    paint: {
+        'fill-color': ['get', 'fill_color'], // Dynamische kleur gebaseerd op de waarde van fill_color
+        'fill-opacity': 0.7, // Optioneel: pas de opaciteit van de vulling aan
+    },
+  });
+})
 
 map.on('load', () => {
   // Add the 3D building layer

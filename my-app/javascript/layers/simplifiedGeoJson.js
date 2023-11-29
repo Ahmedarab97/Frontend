@@ -1,21 +1,4 @@
 import proj4 from "proj4";
-async function getBuurtenData() {
-    const apiUrl = "http://localhost:8080/gemeente/Nieuwegein";
-    try {
-        const response = await fetch(apiUrl);
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            return data;
-        } else {
-            console.error("Fout bij ophalen data:", response.status);
-        }
-    } catch (error) {
-        console.error("Fout bij ophalen data:", error);
-    }
-}
-
-
 
 proj4.defs('EPSG:28992', '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,-1.8703473836068,4.0812 +units=m +no_defs');
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
@@ -50,22 +33,17 @@ async function loadGeoJSON(filePath) {
     return geojson;
 }
 const origineleGeojson = '/data/WijkenNieuwegein.geojson'
-export async function getLaaggeletterdheidGeoJson() {
-    let buurten = await getBuurtenData();
-    console.log(buurten)
+export function getSimpleGeoJson() {
     return new Promise((resolve, reject) => {
         loadGeoJSON(origineleGeojson).then(origineleGeojson => {
             const simplifiedGeoJson = {
                 type: 'FeatureCollection',
                 features: origineleGeojson.features.map(feature => {
                     const exteriorRing = feature.geometry.coordinates.map(polygon => polygon.map(point => convertCoordinatesTo4326(point)))
-                    const buurtData = buurten.wijken.find(data => data.wijkCode === feature.properties.wijkcode);
-                    let fill_color = getFillColor(buurtData);
                     console.log(exteriorRing);
                     return {
                         type: 'Feature',
                         properties: feature.properties,
-                        fill_color: fill_color,
                         geometry: {
                             type: 'Polygon',
                             coordinates: exteriorRing[0],
@@ -77,13 +55,3 @@ export async function getLaaggeletterdheidGeoJson() {
         }).catch(error => reject(error))
     })
 }
-
-function getFillColor(buurtData) {
-    let kleur = null;
-    if(buurtData.wijkInfo.laagGeletterdheid.percentageTaalgroei < 1) {
-        kleur = '#00FF00'
-    }
-    return kleur;
-}
-
-

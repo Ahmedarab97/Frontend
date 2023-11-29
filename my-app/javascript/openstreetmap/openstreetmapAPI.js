@@ -1,5 +1,4 @@
 import { fromLonLat } from 'ol/proj';
-import {laaggeletterdheidLayer} from "../layers/laaggeltterdheidLayer";
 
 export async function getCoordinatenVanOpenStreetMap(postcode) {
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${postcode}`;
