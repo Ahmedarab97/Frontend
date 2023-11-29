@@ -61,11 +61,12 @@ export async function getLaaggeletterdheidGeoJson() {
                     const exteriorRing = feature.geometry.coordinates.map(polygon => polygon.map(point => convertCoordinatesTo4326(point)))
                     const buurtData = buurten.wijken.find(data => data.wijkCode === feature.properties.wijkcode);
                     let fill_color = getFillColor(buurtData);
+                    feature.properties.fill_color = fill_color;
+                    console.log(fill_color);
                     console.log(exteriorRing);
                     return {
                         type: 'Feature',
                         properties: feature.properties,
-                        fill_color: fill_color,
                         geometry: {
                             type: 'Polygon',
                             coordinates: exteriorRing[0],
@@ -79,11 +80,28 @@ export async function getLaaggeletterdheidGeoJson() {
 }
 
 function getFillColor(buurtData) {
-    let kleur = null;
-    if(buurtData.wijkInfo.laagGeletterdheid.percentageTaalgroei < 1) {
-        kleur = '#00FF00'
+    let color = null;
+    var totaal = buurtData.aantalInwoners * buurtData.wijkInfo.laagGeletterdheid.percentageTaalgroei;
+    var afgerond = Math.round(totaal);
+    console.log(totaal);
+    if (afgerond <= 0) {
+        color = "#008000";
+    } else if (afgerond <= 20) {
+        color = "#90EE90";
+    } else if (afgerond <= 40) {
+        color = "#FFFF00";
+    } else if (afgerond <= 60) {
+        color = "#FFD700";
+    } else if (afgerond <= 80) {
+        color = "#FFA500";
+    } else if (afgerond <= 100) {
+        color = "#FF6347";
+    } else if (afgerond <= 120) {
+        color = "#FF0000";
+    } else {
+        color = "#8B0000";
     }
-    return kleur;
+    return color;
 }
 
 

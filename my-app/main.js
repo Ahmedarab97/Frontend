@@ -57,25 +57,27 @@ var map = new mapboxgl.Map({
     });
   })
 
-const laagGeletterdHeidGeoJson = await getLaaggeletterdheidGeoJson()
-map.on('click', function () {
-  map.addSource('laag-source', {
-    type: 'geojson',
-    data: laagGeletterdHeidGeoJson,
-  });
+window.addLayer =  async function() {
+  const laagGeletterdHeidGeoJson = await getLaaggeletterdheidGeoJson()
+  console.log(laagGeletterdHeidGeoJson.features[1]);
+    map.addSource('laag-source', {
+      type: 'geojson',
+      data: laagGeletterdHeidGeoJson,
+    });
 
-  // Voeg een laag toe voor de outlines van wijken
-  map.addLayer({
-    id: 'laag-layer',
-    type: 'fill',
-    source: 'laag-source',
-    layout: {},
-    paint: {
+    // Voeg een laag toe voor de outlines van wijken
+    map.addLayer({
+      id: 'laag-layer',
+      type: 'fill',
+      source: 'laag-source',
+      layout: {},
+      paint: {
         'fill-color': ['get', 'fill_color'], // Dynamische kleur gebaseerd op de waarde van fill_color
         'fill-opacity': 0.7, // Optioneel: pas de opaciteit van de vulling aan
-    },
-  });
-})
+      },
+    });
+}
+
 
 map.on('load', () => {
   // Add the 3D building layer
