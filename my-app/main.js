@@ -1,5 +1,6 @@
 import {bolletjesLayer} from "./javascript/layers/bolletjes";
 import {getCoordinatenVanGoogleMaps} from "./javascript/openstreetmap/openstreetmapAPI";
+// import Control from "ol/control";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibmllbHMtc3R1ZGVudCIsImEiOiJjbHA5cmJ1NTIwMDYxMmlybGFrZWRjbDZ6In0.8VO7uezdXrrfBqeZpyYXDA';
 
@@ -54,6 +55,34 @@ map.on('load', () => {
       'fill-extrusion-opacity': 0.6
     }
   });
+  // Add checkboxes dynamically
+  const checkboxesContainer = document.createElement('div');
+  checkboxesContainer.id = 'checkboxes-container';
+  map.getContainer().appendChild(checkboxesContainer);
+
+  const checkbox1 = createCheckbox('checkbox1', 'Checkbox 1');
+  const checkbox2 = createCheckbox('checkbox2', 'Checkbox 2');
+  const checkbox3 = createCheckbox('checkbox3', 'Checkbox 3'); // New checkbox
+
+  checkboxesContainer.appendChild(checkbox1);
+  checkboxesContainer.appendChild(checkbox2);
+  checkboxesContainer.appendChild(checkbox3); // Append the new checkbox
+
+  function createCheckbox(id, label) {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = id;
+
+    const checkboxLabel = document.createElement('label');
+    checkboxLabel.setAttribute('for', id);
+    checkboxLabel.innerText = label;
+
+    const checkboxWrapper = document.createElement('div');
+    checkboxWrapper.appendChild(checkbox);
+    checkboxWrapper.appendChild(checkboxLabel);
+
+    return checkboxWrapper;
+  }
 });
 
 map.addControl(new mapboxgl.NavigationControl());
@@ -101,3 +130,43 @@ window.addMarker = async function() {
     map.getCanvas().style.cursor = '';
   });
 }
+
+
+// // Create a container div for checkboxes
+// const checkboxesContainer = document.createElement('div');
+// checkboxesContainer.id = 'checkboxes-container';
+//
+// // Create checkboxes and add them to the container
+// const checkbox1 = createCheckbox('Checkbox 1');
+// const checkbox2 = createCheckbox('Checkbox 2');
+//
+// checkboxesContainer.appendChild(checkbox1);
+// checkboxesContainer.appendChild(checkbox2);
+//
+// // Create a custom control
+// const checkboxesControl = new mapboxgl.Control({ position: 'top-left' });
+//
+// // Add the checkboxes container to the control
+// checkboxesControl.onAdd = function() {
+//   return checkboxesContainer;
+// };
+//
+// // Add the control to the map
+// map.addControl(checkboxesControl);
+//
+// // Function to create a checkbox
+// function createCheckbox(label) {
+//   const checkbox = document.createElement('input');
+//   checkbox.type = 'checkbox';
+//   checkbox.id = label.toLowerCase().replace(/\s/g, '-');
+//
+//   const checkboxLabel = document.createElement('label');
+//   checkboxLabel.htmlFor = checkbox.id;
+//   checkboxLabel.appendChild(document.createTextNode(label));
+//
+//   const checkboxContainer = document.createElement('div');
+//   checkboxContainer.appendChild(checkbox);
+//   checkboxContainer.appendChild(checkboxLabel);
+//
+//   return checkboxContainer;
+// }

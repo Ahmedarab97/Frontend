@@ -10,13 +10,59 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNGXGaZGz4G7Pqz4SWctcSDKMnJ4kpaoc&libraries=places" defer></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    #checkboxes-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background-color: rgba(0, 255, 255, 0.2);
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      height: 180px;
+      width: 120px;
+      display: flex;
+      flex-direction: column; /* Arrange checkboxes vertically */
+    }
+
+    /* Checkbox Styles */
+    #checkboxes-container label,
+    #checkboxes-container input {
+      position: relative;
+      left: 15px;
+      border: none;
+      z-index: 2;
+      margin-top: 5px;
+    }
+
+    #checkboxes-container input {
+      cursor: pointer
+    }
+  </style>
 </head>
 <body>
+
 <div id="map"></div>
 <div id="popup" class="mapboxgl-popup"></div>
+<nav id="filter-group" class="filter-group"></nav>
 <label for="postalCodeInput">Enter Postal Code:</label>
 <input type="text" id="postalCodeInput" />
 <button onclick="addMarker()">Add Marker</button>
+
+
+<!--&lt;!&ndash; Checkboxes Container &ndash;&gt;-->
+<!--<div id="checkboxes-container">-->
+<!--  <label>-->
+<!--    <input type="checkbox" id="checkbox1" />-->
+<!--    Checkbox 1-->
+<!--  </label>-->
+<!--  <br />-->
+<!--  <label>-->
+<!--    <input type="checkbox" id="checkbox2" />-->
+<!--    Checkbox 2-->
+<!--  </label>-->
+<!--</div>-->
 
 <p id="dataTekst"></p>
 <script type="module" src="./main.js"></script>
