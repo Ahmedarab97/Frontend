@@ -60,18 +60,30 @@ map.on('load', () => {
   checkboxesContainer.id = 'checkboxes-container';
   map.getContainer().appendChild(checkboxesContainer);
 
-  const checkbox1 = createCheckbox('checkbox1', 'Checkbox 1');
-  const checkbox2 = createCheckbox('checkbox2', 'Checkbox 2');
-  const checkbox3 = createCheckbox('checkbox3', 'Checkbox 3'); // New checkbox
+  const checkbox1 = createCheckbox('checkbox1', '3d-gebouwen', '3d-buildings');
+  const checkbox2 = createCheckbox('checkbox2', 'Laaggeletterdheid', 'laag-layer');
+  const checkbox3 = createCheckbox('checkbox3', 'Wijken', 'another-layer'); // Replace 'another-layer' with the actual layer ID
 
   checkboxesContainer.appendChild(checkbox1);
   checkboxesContainer.appendChild(checkbox2);
-  checkboxesContainer.appendChild(checkbox3); // Append the new checkbox
+  checkboxesContainer.appendChild(checkbox3);
 
-  function createCheckbox(id, label) {
+  function createCheckbox(id, label, layerId) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.id = id;
+
+    checkbox.addEventListener('change', function () {
+      const layer = map.getLayer(layerId);
+
+      if (layer) {
+        if (checkbox.checked) {
+          map.setLayoutProperty(layerId, 'visibility', 'visible');
+        } else {
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+      }
+    });
 
     const checkboxLabel = document.createElement('label');
     checkboxLabel.setAttribute('for', id);
