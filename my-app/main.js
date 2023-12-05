@@ -5,6 +5,7 @@ import proj4 from 'proj4';
 import {getSimpleGeoJson} from "./javascript/layers/simplifiedGeoJson";
 import {getLaaggeletterdheidGeoJson} from "./javascript/layers/laaggeltterdheidLayer";
 import {getBeweegLayerGeoJson} from "./javascript/layers/beweegLayer";
+import {getGezondheidLayerGeoJson} from "./javascript/layers/gezondheidLayer";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibmllbHMtc3R1ZGVudCIsImEiOiJjbHA5cmJ1NTIwMDYxMmlybGFrZWRjbDZ6In0.8VO7uezdXrrfBqeZpyYXDA';
 
@@ -159,6 +160,29 @@ window.addBeweegLayer = async function (e) {
     id: 'beweeg-layer',
     type: 'fill',
     source: 'beweeg-source',
+    layout: {},
+    paint: {
+      'fill-color': ['get', 'fill_color'], // Dynamische kleur gebaseerd op de waarde van fill_color
+      'fill-opacity': 0.4, //pas de opaciteit van de vulling aan
+      'fill-outline-color': 'black', // Kleur van de outline
+      'fill-antialias': true,
+    },
+  });
+}
+
+window.addGezondheidLayer = async function(e) {
+  const gezondheidLayerGeoJson = await getGezondheidLayerGeoJson()
+  console.log(gezondheidLayerGeoJson.features[1]);
+  map.addSource('gezondheid-source', {
+    type: 'geojson',
+    data: gezondheidLayerGeoJson,
+  });
+
+  // Voeg een laag toe voor de outlines van wijken
+  map.addLayer({
+    id: 'gezondheid-layer',
+    type: 'fill',
+    source: 'gezondheid-source',
     layout: {},
     paint: {
       'fill-color': ['get', 'fill_color'], // Dynamische kleur gebaseerd op de waarde van fill_color
