@@ -81,25 +81,25 @@ export async function getBeweegLayerGeoJson() {
 
 function getFillColor(buurtData) {
     let color = null;
-    var totaal = buurtData.aantalInwoners * buurtData.wijkInfo.bewegen.percentageWekelijkseSporter;
+    var totaal = buurtData.aantalInwoners * (buurtData.wijkInfo.bewegen.percentageWekelijkseSporter + buurtData.wijkInfo.bewegen.percentageVoldoetAanBeweegRichtlijn);
     var afgerond = Math.round(totaal);
     console.log(totaal);
     if (afgerond <= 0) {
-        color = "#008000";
+        color = "#BFEFFF";
     } else if (afgerond <= 20) {
-        color = "#90EE90";
+        color = "#87CEEB";
     } else if (afgerond <= 40) {
-        color = "#FFFF00";
+        color = "#5F9EA0";
     } else if (afgerond <= 60) {
-        color = "#FFD700";
+        color = "#FFFFE0";
     } else if (afgerond <= 80) {
-        color = "#FFA500";
+        color = "#2E6AA8";
     } else if (afgerond <= 100) {
-        color = "#FF6347";
+        color = "#1E90FF";
     } else if (afgerond <= 120) {
-        color = "#FF0000";
+        color = "#104E8B";
     } else {
-        color = "#8B0000";
+        color = "#000080";
     }
     return color;
 }
