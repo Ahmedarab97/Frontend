@@ -4,6 +4,7 @@ import {or} from "ol/format/filter";
 import proj4 from 'proj4';
 import {getSimpleGeoJson} from "./javascript/layers/simplifiedGeoJson";
 import {getLaaggeletterdheidGeoJson} from "./javascript/layers/laaggeltterdheidLayer";
+import {getBeweegLayerGeoJson} from "./javascript/layers/beweegLayer";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibmllbHMtc3R1ZGVudCIsImEiOiJjbHA5cmJ1NTIwMDYxMmlybGFrZWRjbDZ6In0.8VO7uezdXrrfBqeZpyYXDA';
 
@@ -142,5 +143,28 @@ window.addMarker = async function() {
 
   map.on('mouseleave', 'bolletjes-layer', function () {
     map.getCanvas().style.cursor = '';
+  });
+}
+
+window.addBeweegLayer = async function (e) {
+  const beweegLayerGeoJson = await getBeweegLayerGeoJson()
+  console.log(beweegLayerGeoJson.features[1]);
+  map.addSource('beweeg-source', {
+    type: 'geojson',
+    data: beweegLayerGeoJson,
+  });
+
+  // Voeg een laag toe voor de outlines van wijken
+  map.addLayer({
+    id: 'beweeg-layer',
+    type: 'fill',
+    source: 'beweeg-source',
+    layout: {},
+    paint: {
+      'fill-color': ['get', 'fill_color'], // Dynamische kleur gebaseerd op de waarde van fill_color
+      'fill-opacity': 0.4, //pas de opaciteit van de vulling aan
+      'fill-outline-color': 'black', // Kleur van de outline
+      'fill-antialias': true,
+    },
   });
 }
