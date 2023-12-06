@@ -37,6 +37,12 @@ export async function bolletjesLayer() {
             else if(buurt.naam === "Hoge Landen") {
                 coordinates = [5.07376637133107, 52.01368163472124];
             }
+            else if(buurt.naam === "Hoogzandveld") {
+                coordinates = [5.082938605595643, 52.008507488829345]
+            }
+            else if(buurt.naam === "Merwestein") {
+                coordinates = [5.091722608962451, 52.0276907207489]
+            }
             else {
                 coordinates = await getCoordinatenVanGoogleMaps(buurt.naam + " Nieuwegein");
             }
