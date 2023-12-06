@@ -26,7 +26,21 @@ export async function bolletjesLayer() {
     for (const buurt of buurten.wijken) {
         if (buurt.wijkInfo !== null && buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei !== null) {
             console.log(buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei);
-            var coordinates = await getCoordinatenVanGoogleMaps(buurt.naam + " Nieuwegein");
+            let coordinates = [];
+            if(buurt.naam === "Vreeswijk") {
+                coordinates = [5.098527846466993, 52.00711966673286];
+
+            }
+            else if(buurt.naam === "Plettenburg") {
+                coordinates = [5.107646183920976, 52.030920129295545];
+            }
+            else if(buurt.naam === "Hoge Landen") {
+                coordinates = [5.07376637133107, 52.01368163472124];
+            }
+            else {
+                coordinates = await getCoordinatenVanGoogleMaps(buurt.naam + " Nieuwegein");
+            }
+
             let coordinatesCijferObject = {
                 coord: coordinates,
                 cijfer: buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei,
